@@ -26,12 +26,31 @@ p._p.append(omml_el2)
 # x, y, z, t = symbols("x y z t")
 #
 # obj = print_mathml(Integral(sqrt(1 / x), x))
-# omml3 = mathml2omml.convert(obj)
-# results2 = (
-#   f'<p xmlns:m="http://schemas.openxmlformats.org/officeDocument'
-#   f'/2006/math">{omml3}</p>'
-# )
-# omml_el3 = parse_xml(results2)[0]
-# p._p.append(omml_el3)
+obj = '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>x</mi><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi><mo>±</mo><msqrt><mrow><msup><mi>b</mi><mn>2</mn></msup><mo>-</mo><mn>4</mn><mi>a</mi><mi>c</mi></mrow></msqrt></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></math>'
+omml3 = mathml2omml.convert(obj)
+results2 = (
+  f'<p xmlns:m="http://schemas.openxmlformats.org/officeDocument'
+  f'/2006/math">{omml3}</p>'
+)
+omml_el3 = parse_xml(results2)[0]
+p._p.append(omml_el3)
 
-document.save("demo4.docx")
+from sympy import *
+
+i, j = symbols("i j", cls=Idx)
+sum2 = Sum(Sum(Indexed("a", i) * Indexed("b", j), (i, 0, 2)), (j, 0, 2))
+latex_strings = latex(sum2)
+
+import latex2mathml.converter
+
+mathml_output = latex2mathml.converter.convert(latex_strings)
+
+omml3 = mathml2omml.convert(mathml_output)
+results2 = (
+  f'<p xmlns:m="http://schemas.openxmlformats.org/officeDocument'
+  f'/2006/math">{omml3}</p>'
+)
+omml_el3 = parse_xml(results2)[0]
+p._p.append(omml_el3)
+
+document.save("demo5.docx")
