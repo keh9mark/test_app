@@ -78,6 +78,61 @@ def make_graph_image(items, merge_info):
   return image_name
 
 
+def create_power_flow_image(merge_info):
+  # предполагаем что начинается и заканчивается на Источник А
+  x_start = 1
+  y_start = 1
+  fig, ax = plt.subplots()
+
+  # расставим точки
+  points = {}
+  x_list = []
+  y_list = []
+  for attached in merge_info:
+    first = attached[0]
+    second = attached[1]
+    if first == "A":
+      points[first] = {"x": x_start, "y": y_start}
+      x_list.append(x_start)
+      y_list.append(y_start)
+      ax.text(
+        x_start,
+        y_start + 0.005,
+        f"{first}",
+        {},
+        rotation=0,
+        bbox=dict(
+          boxstyle="square",
+          ec=(0, 0, 0),
+          fc=(1, 1, 1),
+        ),
+      )
+      x_start += 2
+    points[second] = {"x": x_start, "y": y_start}
+    ax.text(
+      x_start,
+      y_start + 0.005,
+      f"{second}",
+      {},
+      rotation=0,
+      bbox=dict(
+        boxstyle="square",
+        ec=(0, 0, 0),
+        fc=(1, 1, 1),
+      ),
+    )
+    x_list.append(x_start)
+    y_list.append(y_start)
+    if second in ["B", "1", "2", "3", "4", "5"]:
+      x_list.append(x_start)
+      y_list.append(y_start - 0.05)
+
+    x_start += 2
+  ax.scatter(x_list, y_list, color="k")
+
+  plt.show()
+
+
 if __name__ == "__main__":
   items = {
     "A": {
@@ -140,4 +195,5 @@ if __name__ == "__main__":
 
   merge_info = ["A1", "12", "2B", "B4", "43", "35", "5A"]
 
-  make_graph_image(items=items, merge_info=merge_info)
+  # make_graph_image(items=items, merge_info=merge_info)
+  create_power_flow_image(merge_info)
