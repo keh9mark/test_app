@@ -81,7 +81,7 @@ def make_graph_image(items, merge_info):
 def create_power_flow_image(merge_info):
   # предполагаем что начинается и заканчивается на Источник А
   x_start = 1
-  y_start = 1
+  y_start = 0.5
   fig, ax = plt.subplots()
 
   # расставим точки
@@ -97,7 +97,7 @@ def create_power_flow_image(merge_info):
       y_list.append(y_start)
       ax.text(
         x_start,
-        y_start + 0.005,
+        y_start + 0.03,
         f"{first}",
         {},
         rotation=0,
@@ -111,7 +111,7 @@ def create_power_flow_image(merge_info):
     points[second] = {"x": x_start, "y": y_start}
     ax.text(
       x_start,
-      y_start + 0.005,
+      y_start + 0.03,
       f"{second}",
       {},
       rotation=0,
@@ -124,12 +124,16 @@ def create_power_flow_image(merge_info):
     x_list.append(x_start)
     y_list.append(y_start)
     if second in ["B", "1", "2", "3", "4", "5"]:
-      x_list.append(x_start)
-      y_list.append(y_start - 0.05)
-
+      load_x = x_start
+      load_y = y_start - 0.2
+      x_list.append(load_x)
+      y_list.append(load_y)
     x_start += 2
   ax.scatter(x_list, y_list, color="k")
 
+  axes = plt.gca()
+  axes.set_xlim([0, x_start])
+  axes.set_ylim([0, 1])
   plt.show()
 
 
